@@ -109,7 +109,7 @@ class Node(GradaleComponent):
         if not isinstance(path, (str, six.string_types)):
             # Es un DirEntry
             path = path.path
-        return os.path.expanduser(path)
+        return os.path.abspath(os.path.expanduser(path))
 
 
 class File(Node):
@@ -226,7 +226,7 @@ def bak_target_decorator(fn):
 def get_path(node):
     if isinstance(node, Node):
         return node.path
-    return os.path.expanduser(node)
+    return os.path.abspath(os.path.expanduser(node))
 
 
 def get_node(path):
