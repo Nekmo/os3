@@ -241,8 +241,8 @@ def symlink(source, link_name):
 
 def mkdir(path, mode=511, exists_ok=False):
     if sys.version_info >= (3,0):
-        return os.makedirs(os.path.expanduser(path), mode, exists_ok)
-    return os.makedirs(os.path.expanduser(path), mode)
+        return os.makedirs(get_path(path), mode, exists_ok)
+    return os.makedirs(get_path(path), mode)
 
 
 def cp(src, dst, symlinks=False, ignore=None):
