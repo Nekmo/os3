@@ -1,11 +1,11 @@
 import subprocess
 
-from gradale.components.nodes import Node, get_path
+from gradale.components.nodes import Node
 
 
 class Run(object):
     def __init__(self, cmd, cwd=None):
-        cmd = list(map(get_path, cmd))
+        cmd = list(map(lambda x: x.path if isinstance(x, Node) else x, cmd))
         if isinstance(cwd, Node):
             cwd = cwd.path
         self.process = subprocess.Popen(cmd, cwd=cwd)

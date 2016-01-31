@@ -1,6 +1,9 @@
 import os
 import sys
 
+import six
+
+
 class FakeDirEntry(object):
     def __init__(self, path):
         self.path = path
@@ -37,10 +40,15 @@ def scandir(path='.'):
 
 
 def deep_scandir(path, deep=False, cls=None, filter=None):
+    def get_path(path):
+        if not isinstance(path, (str, six.string_types)):
+            path = path.path
+        return path
     for item in scandir(path):
+        item = os.path.join(get_path(path), get_path(item))
         item = item if cls is None else cls(item)
         if filter is not None and not filter(item):
-            return
+            continue
         yield item
         if deep and item.is_dir():
             new_deep = deep

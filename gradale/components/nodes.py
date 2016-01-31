@@ -189,7 +189,7 @@ class Dir(Node, GradaleList):
         return []
 
     def _get_iter(self):
-        return deep_scandir(self.path, self.deep, cls=Node.get_node, filter=lambda x: True)
+        return deep_scandir(self.path, self.deep, cls=Node, filter=lambda x: True)
         # return iter(os.listdir(self.path))
 
     def _prepare_next(self, elem):
@@ -224,6 +224,12 @@ def bak_target_decorator(fn):
 
 
 def get_path(node):
+    if isinstance(node, Node):
+        return node.path
+    return os.path.expanduser(node)
+
+
+def get_abspath(node):
     if isinstance(node, Node):
         return node.path
     return os.path.abspath(os.path.expanduser(node))
