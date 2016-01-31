@@ -114,13 +114,13 @@ class GradaleList(GradaleComponent):
     #     """
     #     return self.__next__()
 
-    def values(self, *interfaces, this=False):
-        if this:
+    def values(self, *interfaces, **kwargs):
+        if kwargs.pop('this', False):
             return super(GradaleList, self).values(*interfaces)
         return [n.values(*interfaces, this=True) for n in self.list()]
 
-    def value(self, interface, this=False):
-        if this:
+    def value(self, interface, **kwargs):
+        if kwargs.pop('this', False):
             return super(GradaleList, self).value(interface)
         return [n.value(interface, this=True) for n in self.list()]
 
