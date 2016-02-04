@@ -19,7 +19,10 @@ class Node(GradaleComponent):
     def __new__(cls, *args, **kwargs):
         if cls != Node or not args:
             return GradaleComponent.__new__(cls)
-        path = os.path.realpath(os.path.expanduser(args[0])) if args else None
+        if args and isinstance(args[0], Node):
+            path = args[0].path
+        else:
+            path = os.path.realpath(os.path.expanduser(args[0])) if args else None
         if path and os.path.isdir(path):
             return Dir.__new__(Dir, *args, **kwargs)
         elif path and os.path.isfile(path):
