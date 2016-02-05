@@ -1,4 +1,6 @@
-def add_decorator(*targets, decorator=None):
+
+def add_decorator(*targets, **kwargs):
+    decorator = kwargs.pop('decorator', None)
     if decorator is None:
         raise ValueError('The decorator must be defined')
     args = tuple(map(decorator, targets))

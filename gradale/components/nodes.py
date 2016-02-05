@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 
 import posix
@@ -138,6 +139,9 @@ class File(Node):
         if n is not None and not isinstance(n, int):
             mode = n
             n = None
+        if six.PY2 and n is None:
+            # PATCH: Python2 requiere que n sea un int siempre
+            n = -1
         return self._get_open(mode, buffering, encoding, errors, newline, closefd, opener).read(n)
 
     def tell(self):
@@ -150,7 +154,10 @@ class File(Node):
                   opener=None, breaklines=True):
         if n is not None and not isinstance(n, int):
             mode = n
-            n = None
+            n = 0
+        if six.PY2 and n is None:
+            # PATCH: Python2 requiere que n sea un int siempre
+            n = 0
         lines = self._get_open(mode, buffering, encoding, errors, newline, closefd, opener).readlines(n)
 
         def remove_breakline(line):

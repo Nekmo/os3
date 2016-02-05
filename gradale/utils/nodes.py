@@ -54,4 +54,6 @@ def deep_scandir(path, deep=False, cls=None, filter=None):
             new_deep = deep
             if not isinstance(deep, bool) and isinstance(deep, int):
                 new_deep = deep - 1
-            yield from deep_scandir(item.path, new_deep)
+            # yield from deep_scandir(item.path, new_deep)
+            for item in  deep_scandir(item.path, new_deep):
+                yield item

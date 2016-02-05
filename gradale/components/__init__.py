@@ -1,6 +1,6 @@
+# -*- coding: utf-8 -*-
 
-
-class GradaleComponent:
+class GradaleComponent(object):
     __clone_params__ = []
 
     def check_filters(self, **kwargs):
