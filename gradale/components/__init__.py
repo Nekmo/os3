@@ -9,7 +9,7 @@ class GradaleComponent:
                 return False
         return True
 
-    def values(self, *interfaces, this=True):
+    def values(self, *interfaces, **kwargs):
         return {key: getattr(self, key) for key in interfaces}
 
     def value(self, interface, this=True):
