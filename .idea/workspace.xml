@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b0599e83-d531-4dc2-9fba-784502faf010" name="Default" comment="Compatibilidad Python2.">
+    <list default="true" id="b0599e83-d531-4dc2-9fba-784502faf010" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/.name" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/gradale.iml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="" />
     </list>
     <ignored path="gradale.iws" />
@@ -647,7 +654,13 @@
       <option name="project" value="LOCAL" />
       <updated>1454635688329</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Borrado workspace.">
+      <created>1454636682265</created>
+      <option name="number" value="00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1454636682265</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -717,7 +730,8 @@
     <MESSAGE value="Solucionado bug de relative path y absolute path en Nodes." />
     <MESSAGE value="Ahora se usa **kwargs en vez de this en GradaleComponents para compatibilidad Py2." />
     <MESSAGE value="Compatibilidad Python2." />
-    <option name="LAST_COMMIT_MESSAGE" value="Compatibilidad Python2." />
+    <MESSAGE value="Borrado workspace." />
+    <option name="LAST_COMMIT_MESSAGE" value="Borrado workspace." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
