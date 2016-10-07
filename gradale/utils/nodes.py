@@ -1,10 +1,13 @@
 import os
 import sys
+import stat
 
 import six
 
 
 class FakeDirEntry(object):
+    _stat = None
+
     def __init__(self, path):
         self.path = path
 
@@ -12,20 +15,22 @@ class FakeDirEntry(object):
     def name(self):
         return self.path.split(self.path)[1]
 
-    @property
     def is_dir(self):
-        return os.path.isdir(self.path)
+        return stat.S_ISDIR(self.stat().st_mode)
 
-    @property
     def is_symlink(self):
-        import pathlib
-        return pathlib.Path.is_symlink(self.path)
+        return stat.S_ISLNK(self.stat().st_mode)
 
-    def stat(self, follow_symlinks=True):
-        return os.stat(self.path, follow_symlinks=follow_symlinks)
+    def is_file(self):
+        return stat.S_ISREG(self.stat().st_mode)
+
+    def stat(self):
+        if not self._stat:
+            self._stat = os.stat(self.path)
+        return self._stat
 
     def inode(self):
-        return os.stat(self.path).st_ino
+        return self.stat().st_ino
 
 
 def scandir(path='.'):
@@ -55,5 +60,5 @@ def deep_scandir(path, deep=False, cls=None, filter=None):
             if not isinstance(deep, bool) and isinstance(deep, int):
                 new_deep = deep - 1
             # yield from deep_scandir(item.path, new_deep)
-            for item in  deep_scandir(item.path, new_deep):
+            for item in deep_scandir(item.path, new_deep, cls):
                 yield item

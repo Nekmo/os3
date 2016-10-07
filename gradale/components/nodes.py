@@ -199,7 +199,7 @@ class Dir(Node, GradaleList):
         return []
 
     def _get_iter(self):
-        return deep_scandir(self.path, self.deep, cls=Node, filter=lambda x: True)
+        return deep_scandir(self.path, self.deep, cls=Node, filter=self._elem_is_valid)
         # return iter(os.listdir(self.path))
 
     def _prepare_next(self, elem):
@@ -208,9 +208,9 @@ class Dir(Node, GradaleList):
 
     def _elem_is_valid(self, elem):
         # TODO: Hay 2 tipos de filtros: aquellos que se aplican DURANTE el listado, y aquellos que se aplican DESPUÉS.
-        # if elem.is_dir() and self.deep:
-        #     # Aplicar SOLO los filtros previos a los directorios
-        #     return elem.check_filters(**self._pre_filters or {})
+        if elem.is_dir() and self.deep:
+            # Aplicar SOLO los filtros previos a los directorios
+            return elem.check_filters(**self._pre_filters or {})
         return elem.check_filters(**self._filters or {})
 
     # def __repr__(self):
