@@ -7,9 +7,9 @@ import shutil
 import six
 import sys
 
-from gradale.components import GradaleList, StartsWithEqual
-from gradale.utils.console import pprint_list
-from gradale.utils.nodes import deep_scandir
+from os3.components import GradaleList, StartsWithEqual
+from os3.utils.console import pprint_list
+from os3.utils.nodes import deep_scandir
 from . import GradaleComponent
 
 

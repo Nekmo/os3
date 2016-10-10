@@ -2,8 +2,8 @@ import os
 import unittest
 from operator import itemgetter
 
-from gradale.components.nodes import Dir
-from gradale.tests.base import MockTreeNode
+from os3.components.nodes import Dir
+from os3.tests.base import MockTreeNode
 
 
 class TestDirectory(MockTreeNode):

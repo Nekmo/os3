@@ -1,6 +1,6 @@
 import subprocess
 
-from gradale.components.nodes import Node
+from os3.components.nodes import Node
 
 
 class Run(object):
