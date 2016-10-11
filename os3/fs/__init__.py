@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
 
-import posix
+from colorama import Back
+from colorama import Style
+from colorama import init, Fore
 
 import shutil
 import six
@@ -10,17 +12,19 @@ import sys
 from os3.components import GradaleList, StartsWithEqual
 from os3.utils.console import pprint_list
 from os3.utils.nodes import deep_scandir
-from . import GradaleComponent
+from ..components import GradaleComponent
 
 
-class Node(GradaleComponent):
+init()
+
+class Entry(GradaleComponent):
     _type = None
     path = ''
 
     def __new__(cls, *args, **kwargs):
-        if cls != Node or not args:
+        if cls != Entry or not args:
             return GradaleComponent.__new__(cls)
-        if args and isinstance(args[0], Node):
+        if args and isinstance(args[0], Entry):
             path = args[0].path
         else:
             path = os.path.realpath(os.path.expanduser(args[0])) if args else None
@@ -28,7 +32,8 @@ class Node(GradaleComponent):
             return Dir.__new__(Dir, *args, **kwargs)
         elif path and os.path.isfile(path):
             return File.__new__(File, *args, **kwargs)
-        return GradaleComponent.__new__(cls)
+        return File.__new__(File, *args, **kwargs)
+        # return GradaleComponent.__new__(cls)
 
     def __init__(self, path, **kwargs):
         self.path = self._get_path(path)
@@ -104,7 +109,7 @@ class Node(GradaleComponent):
         shutil.copytree(self.path, os.path.expanduser(dst), symlinks, ignore)
 
     def sub(self, subpath):
-        return Node(os.path.join(self.path, get_path(subpath)))
+        return Entry(os.path.join(self.path, get_path(subpath)))
 
     @classmethod
     def _get_path(cls, path):
@@ -116,7 +121,7 @@ class Node(GradaleComponent):
         return os.path.abspath(os.path.expanduser(path))
 
 
-class File(Node):
+class File(Entry):
     __interfaces__ = ['name']
     __clone_params__ = ['path']
     _type = 'file'
@@ -181,7 +186,7 @@ class File(Node):
         return self.name
 
 
-class Dir(Node, GradaleList):
+class Dir(Entry, GradaleList):
     _pre_filters = None
     __interfaces__ = ['name']
     __clone_params__ = ['path', 'deep']
@@ -199,11 +204,11 @@ class Dir(Node, GradaleList):
         return []
 
     def _get_iter(self):
-        return deep_scandir(self.path, self.deep, cls=Node, filter=self._elem_is_valid)
+        return deep_scandir(self.path, self.deep, cls=Entry, filter=self._elem_is_valid)
         # return iter(os.listdir(self.path))
 
     def _prepare_next(self, elem):
-        return Node.get_node(elem.path)
+        return Entry.get_node(elem.path)
         # return Node.get_node(os.path.join(self.path, elem))
 
     def _elem_is_valid(self, elem):
@@ -213,6 +218,9 @@ class Dir(Node, GradaleList):
             return elem.check_filters(**self._pre_filters or {})
         return elem.check_filters(**self._filters or {})
 
+    def print_format(self):
+        return '{Fore.BLUE}{name}{Style.RESET_ALL}'.format(name=self.name, Fore=Fore, Style=Style)
+
     # def __repr__(self):
     #     return pprint_list(list(self._get_iter()))
 
@@ -220,9 +228,13 @@ class Dir(Node, GradaleList):
         return self.name
 
 
+class DirPrint(Dir):
+    def print_format(self):
+        return GradaleList.print_format(self)
+
 def bak_target_decorator(fn):
     def decorator(src, dst=None, **kwargs):
-        src, dst = Node(src), Node(dst) if dst else dst
+        src, dst = Entry(src), Entry(dst) if dst else dst
         if dst and os.path.islink(dst.path) and os.path.realpath(dst.path) == os.path.realpath(src.path):
             return
         if not dst and src.exists():
@@ -234,20 +246,20 @@ def bak_target_decorator(fn):
 
 
 def get_path(node):
-    if isinstance(node, Node):
+    if isinstance(node, Entry):
         return node.path
     return os.path.expanduser(node)
 
 
 def get_abspath(node):
-    if isinstance(node, Node):
+    if isinstance(node, Entry):
         return node.path
     return os.path.abspath(os.path.expanduser(node))
 
 
 def get_node(path):
-    if not isinstance(path, Node):
-        return Node(path)
+    if not isinstance(path, Entry):
+        return Entry(path)
     return path
 
 

@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
+from os3.utils.console import pprint_list
+
 
 class GradaleComponent(object):
+    name = ''
     __clone_params__ = []
 
     def check_filters(self, **kwargs):
@@ -19,6 +22,12 @@ class GradaleComponent(object):
         params = {key: getattr(self, key) for key in self.__clone_params__}
         new_instance = self.__class__(**params)
         return new_instance
+
+    def print_format(self):
+        return self.name
+
+    def print(self):
+        print(self.print_format())
 
 
 class GradaleList(GradaleComponent):
@@ -117,6 +126,9 @@ class GradaleList(GradaleComponent):
     #     """Retrocompatibilidad con Python2
     #     """
     #     return self.__next__()
+
+    def print_format(self):
+        return pprint_list([x.print_format() for x in self])
 
     def values(self, *interfaces, **kwargs):
         if kwargs.pop('this', False):
