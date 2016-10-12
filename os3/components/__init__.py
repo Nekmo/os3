@@ -66,7 +66,7 @@ class GradaleList(GradaleComponent):
             it = [x for x in it]
             # TODO: depurando. Los que son un archivo devuelven el método sin llamar. Directorios vacíos...
             # ¡¿una lista vacía?! Resultado esperado: int.
-            it = sorted(it, key=lambda x: [x.value(interface, this=True) for interface in self._sort])
+            it = sorted(it, key=lambda x: [x.value(interface) for interface in self._sort])
         return it
 
     def _next(self, reset=False):
@@ -131,14 +131,19 @@ class GradaleList(GradaleComponent):
         return pprint_list([x.print_format() for x in self])
 
     def values(self, *interfaces, **kwargs):
-        if kwargs.pop('this', False):
-            return super(GradaleList, self).values(*interfaces)
+        return super(GradaleList, self).values(*interfaces)
+
+    def values_list(self, *interfaces, **kwargs):
         return [n.values(*interfaces, this=True) for n in self.list()]
 
     def value(self, interface, **kwargs):
-        if kwargs.pop('this', False):
-            return super(GradaleList, self).value(interface)
-        return [n.value(interface, this=True) for n in self.list()]
+        # TODO: habría que cambiar la lógica en 2 métodos para diferenciar
+        # un objeto directorio de cuando se quiere obtener los values de los
+        # elementos contenidos
+        return super(GradaleList, self).value(interface)
+
+    def value_list(self, interface, **kwargs):
+        return [n.value(interface) for n in self.list()]
 
 
 class StartsWithEqual(object):
