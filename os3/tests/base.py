@@ -12,6 +12,7 @@ class MockTreeNode(TestCase):
         'dir01/subdir01/subsubdir01', 'dir01/subdir01/subsubdir02',
         'dir01/subdir01/subsubdir01/subsubsubdir01',
     ]
+    files_by_dir = 6
 
     def setUp(self):
         self.directory = tempfile.mkdtemp()

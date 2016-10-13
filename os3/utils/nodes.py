@@ -44,21 +44,29 @@ def scandir(path='.'):
         return scandir(path)
 
 
-def deep_scandir(path, deep=False, cls=None, filter=None):
-    def get_path(path):
-        if not isinstance(path, (str, six.string_types)):
-            path = path.path
-        return path
+def get_path(path):
+    if not isinstance(path, (str, six.string_types)):
+        path = path.path
+    return path
+
+
+def deep_scandir(path, deep=False, cls=None, filter=None, traverse_filter=None):
+    filter = filter or (lambda x: True)
+    traverse_filter = traverse_filter or (lambda x: True)
+
     for item in scandir(path):
         item = os.path.join(get_path(path), get_path(item))
         item = item if cls is None else cls(item)
-        if filter is not None and not filter(item):
-            continue
-        yield item
-        if deep and item.is_dir():
+        traverse_result = item.is_dir() and traverse_filter(item)
+        if deep and traverse_result:
             new_deep = deep
             if not isinstance(deep, bool) and isinstance(deep, int):
                 new_deep = deep - 1
             # yield from deep_scandir(item.path, new_deep)
-            for item in deep_scandir(item.path, new_deep, cls):
-                yield item
+            for subitem in deep_scandir(item.path, new_deep, cls):
+                yield subitem
+        if item.is_dir() and not traverse_result:
+            # Si es un directorio y no cumple el traverse_result, no merece probar filter
+            continue
+        if filter(item):
+            yield item

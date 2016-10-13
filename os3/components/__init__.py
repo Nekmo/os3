@@ -8,15 +8,18 @@ class GradaleComponent(object):
 
     def check_filters(self, **kwargs):
         for name, value in kwargs.items():
-            if getattr(self, name) != value:
+            if self.value(name) != value:
                 return False
         return True
 
     def values(self, *interfaces, **kwargs):
         return {key: getattr(self, key) for key in interfaces}
 
-    def value(self, interface, this=True):
-        return getattr(self, interface)
+    def value(self, interface):
+        value = getattr(self, interface)
+        if hasattr(value, '__call__'):
+            value = value()
+        return value
 
     def clone(self):
         params = {key: getattr(self, key) for key in self.__clone_params__}
@@ -31,13 +34,14 @@ class GradaleComponent(object):
 
 
 class GradaleList(GradaleComponent):
-    _filters = None # {}
+    _tuple_filters = None
+    _dict_filters = None
     _sort = None # []
     _iter = None
 
     def _add_filters(self, filters):
-        self._filters = self._filters or {}
-        self._filters.update(filters)
+        self._dict_filters = self._dict_filters or {}
+        self._dict_filters.update(filters)
 
     def _set_sort(self, *interfaces):
         self._sort = interfaces
@@ -94,7 +98,7 @@ class GradaleList(GradaleComponent):
     def _elem_is_valid(self, elem):
         """Comprobar si el elemento se puede devolver por los filtros
         """
-        return elem.check_filters(**self._filters or {})
+        return elem.check_filters(**self._dict_filters or {})
 
     # def __next__(self):
     #     elem = None
@@ -135,12 +139,6 @@ class GradaleList(GradaleComponent):
 
     def values_list(self, *interfaces, **kwargs):
         return [n.values(*interfaces, this=True) for n in self.list()]
-
-    def value(self, interface, **kwargs):
-        # TODO: habría que cambiar la lógica en 2 métodos para diferenciar
-        # un objeto directorio de cuando se quiere obtener los values de los
-        # elementos contenidos
-        return super(GradaleList, self).value(interface)
 
     def value_list(self, interface, **kwargs):
         return [n.value(interface) for n in self.list()]

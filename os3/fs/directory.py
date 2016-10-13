@@ -21,29 +21,22 @@ class Dir(Entry, GradaleList):
         self.root = kwargs.pop('root', None)
         self._pre_filters = kwargs
 
-    def items(self):
-        return []
-
     def _get_iter(self):
-        return deep_scandir(self.path, self.deep, cls=Entry, filter=self._elem_is_valid)
+        return deep_scandir(self.path, self.deep, cls=Entry, filter=self._filter, traverse_filter=self._traverse_filter)
         # return iter(os.listdir(self.path))
 
     def _prepare_next(self, elem):
         return Entry.get_node(elem.path)
         # return Node.get_node(os.path.join(self.path, elem))
 
-    def _elem_is_valid(self, elem):
-        # TODO: Hay 2 tipos de filtros: aquellos que se aplican DURANTE el listado, y aquellos que se aplican DESPUÉS.
-        if elem.is_dir() and self.deep:
-            # Aplicar SOLO los filtros previos a los directorios
-            return elem.check_filters(**self._pre_filters or {})
-        return elem.check_filters(**self._filters or {})
+    def _filter(self, elem):
+        return elem.check_filters(**self._pre_filters or {}) and elem.check_filters(**self._dict_filters or {})
+
+    def _traverse_filter(self, elem):
+        return elem.check_filters(**self._pre_filters or {})
 
     def print_format(self):
         return '{Fore.BLUE}{name}{Style.RESET_ALL}'.format(name=self.name, Fore=Fore, Style=Style)
-
-    # def __repr__(self):
-    #     return pprint_list(list(self._get_iter()))
 
     def __repr__(self):
         return self.name

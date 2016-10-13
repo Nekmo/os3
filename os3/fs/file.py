@@ -11,9 +11,11 @@ class File(Entry):
     __clone_params__ = ['path']
     _type = 'file'
     _open = None
+    _mode = None
 
     def _get_open(self, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None):
-        if self._open is None:
+        if self._open is None or self._mode != mode:
+            self._mode = mode
             return self.open(mode, buffering, encoding, errors, newline, closefd, opener)
         else:
             return self._open
@@ -25,14 +27,28 @@ class File(Entry):
             self._open = open(self.path, mode)
         return self
 
-    def read(self, n=None, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None):
+    def read(self, n=None, mode=None, buffering=-1, encoding=None, errors=None, newline=None, closefd=True,
+             opener=None):
+        mode = mode or self._mode or 'r'
         if n is not None and not isinstance(n, int):
             mode = n
             n = None
         if six.PY2 and n is None:
             # PATCH: Python2 requiere que n sea un int siempre
             n = -1
-        return self._get_open(mode, buffering, encoding, errors, newline, closefd, opener).read(n)
+        data = self._get_open(mode, buffering, encoding, errors, newline, closefd, opener).read(n)
+        if n is None:
+            self.seek(0)
+        return data
+
+    def write(self, data, mode=None, buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None):
+        mode = mode or self._mode or 'w'
+        self._get_open(mode, buffering, encoding, errors, newline, closefd, opener).write(data)
+
+    def touch(self):
+        if not self.lexists():
+            self.write('')
+        return self
 
     def tell(self):
         return self._open.tell()
@@ -63,7 +79,10 @@ class File(Entry):
 
     def readline(self, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None,
                  breakline=True):
-        return self.readlines(1, mode, buffering, encoding, errors, newline, closefd, opener, breakline)
+        line = self.readlines(1, mode, buffering, encoding, errors, newline, closefd, opener, breakline)
+        if not line:
+            return None
+        return line[0]
 
     def seek(self, i):
         return self._open.seek(i)
