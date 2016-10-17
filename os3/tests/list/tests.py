@@ -13,6 +13,9 @@ class TestList(MockTreeNode):
         """
         self.assertEqual(set([node.name for node in Dir(self.directory)]), set(self.list_dir()))
 
+    def test_tree(self):
+        print(Dir(self.directory, deep=True).tree_format())
+
     def test_subfilter(self):
         """Comprobar que los filtros sin deep estén funcionando
         """
@@ -37,6 +40,7 @@ class TestList(MockTreeNode):
         """
         self.assertEqual(Dir(self.directory).sort('size').values_list('path', 'size'),
                          sorted([{'path': path, 'size': os.path.getsize(path)}
+
                                  for path in self.list_dir(full_path=True)], key=itemgetter('size')))
 
 

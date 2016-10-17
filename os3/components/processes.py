@@ -2,7 +2,7 @@ import subprocess
 
 from os3.fs.entry import Entry
 
-from os3.components import GradaleList, GradaleComponent
+from os3.components import GradaleList, init_tree
 
 
 def all_childrens(process):
@@ -20,22 +20,18 @@ def set_cache_tree(tree):
         process._children = []
     for process in tree:
         parent = process.parent()
-        if parent is None:
+        pid = parent.pid if parent else None
+        process._parent = process_by_pid.get(pid)
+        if not process._parent:
             continue
-        process._parent = process_by_pid[parent.pid]
         process._parent._children.append(process)
     return tree
 
 
-def init_tree(process):
-    from treelib import Node, Tree
-    tree = Tree()
-    # tree.create_node(process.name(), process.pid)
-    for children in all_childrens(process):
-        parent = children._parent
-        parent = parent.pid if parent is not None else None
-        tree.create_node(children.name(), children.pid, parent)
-    return tree
+def name_id_parent_fn(process):
+    parent = process._parent
+    parent = parent.pid if parent is not None else None
+    return process.name(), process.pid, parent
 
 
 class Processes(GradaleList):
@@ -49,12 +45,12 @@ class Processes(GradaleList):
         return Process(process)
 
     def print_format(self):
-        cached_tree = set_cache_tree(self)
-        forest = [init_tree(x) for x in filter(lambda x: not x._parent, cached_tree)]
-        output = ''
-        for tree in forest:
-            output += str(tree)
-        return output
+        return self.tree_format()
+
+    def tree_format(self, roots=None, fn_tree=None):
+        roots = set_cache_tree(self)
+        roots = filter(lambda x: not x._parent, roots)
+        return super(Processes, self).tree_format(roots, lambda x: init_tree(all_childrens(x), name_id_parent_fn))
 
     def __repr__(self):
         return self.print_format()

@@ -9,6 +9,7 @@ from os3.components import GradaleComponent, StartsWithEqual
 class Entry(GradaleComponent):
     _type = None
     path = ''
+    root = None
 
     def __new__(cls, *args, **kwargs):
         from os3.fs.directory import Dir
@@ -103,8 +104,20 @@ class Entry(GradaleComponent):
     def copy(self, dst, symlinks=False, ignore=None):
         shutil.copytree(self.path, os.path.expanduser(dst), symlinks, ignore)
 
+    def parent(self):
+        from os3.fs.directory import Dir
+        path = os.path.split(self.path)[0]
+        if self.root and not path.startswith(self.root):
+            return None
+        return Dir(path)
+
     def sub(self, subpath):
+        # TODO: Esto no debería estar limitado a los directorios?
         return Entry(os.path.join(self.path, get_path(subpath)))
+
+    def depth(self):
+        # TODO: tener en cuenta self.root
+        return self.path.split(os.sep)
 
     @classmethod
     def _get_path(cls, path):

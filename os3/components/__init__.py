@@ -2,6 +2,19 @@
 from os3.utils.console import pprint_list
 
 
+def name_id_parent_function(elem):
+    return elem[0], elem[1], elem[2]
+
+
+def init_tree(process, name_id_parent_fn=None):
+    name_id_parent_fn = name_id_parent_fn or name_id_parent_function
+    from treelib import Tree
+    tree = Tree()
+    for children in process:
+        tree.create_node(*name_id_parent_fn(children))
+    return tree
+
+
 class GradaleComponent(object):
     name = ''
     __clone_params__ = []
@@ -132,6 +145,18 @@ class GradaleList(GradaleComponent):
     #     return self.__next__()
 
     def print_format(self):
+        return self.list_format()
+
+    def tree_format(self, roots=None, fn_tree=None):
+        roots = roots if roots is not None else self
+        fn_tree = fn_tree or init_tree
+        forest = [fn_tree(x) for x in roots]
+        output = ''
+        for tree in forest:
+            output += str(tree)
+        return output
+
+    def list_format(self):
         return pprint_list([x.print_format() for x in self])
 
     def values(self, *interfaces, **kwargs):

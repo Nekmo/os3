@@ -2,9 +2,22 @@ import os
 
 from colorama import Fore, Style
 
-from os3.components import GradaleList
+from os3.components import GradaleList, init_tree
 from os3.fs.entry import Entry
 from os3.utils.nodes import deep_scandir
+
+
+def name_id_parent_fn(item):
+    parent = item.parent()
+    parent = parent.path if parent is not None else None
+    return item.name, item.path, parent
+
+
+def init_dir_tree(directory, *args):
+    directory = directory.clone()
+    directory.root = directory.path
+    directories = list(sorted(directory, key=lambda x: x.depth()))
+    return init_tree([directory] + directories, name_id_parent_fn)
 
 
 class Dir(Entry, GradaleList):
@@ -15,6 +28,7 @@ class Dir(Entry, GradaleList):
     _type = 'directory'
 
     def __init__(self, path=None, deep=None, **kwargs):
+        # TODO: renombrar deep a depth
         path = path or os.getcwd()
         super(Dir, self).__init__(path)
         self.deep = deep
@@ -34,6 +48,9 @@ class Dir(Entry, GradaleList):
 
     def _traverse_filter(self, elem):
         return elem.check_filters(**self._pre_filters or {})
+
+    def tree_format(self, roots=None, fn_tree=None, roots_filter_fn=None):
+        return super(Dir, self).tree_format([self], init_dir_tree)
 
     def print_format(self):
         return '{Fore.BLUE}{name}{Style.RESET_ALL}'.format(name=self.name, Fore=Fore, Style=Style)
