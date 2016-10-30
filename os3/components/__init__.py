@@ -40,7 +40,7 @@ class GradaleComponent(object):
         return new_instance
 
     def print_format(self):
-        return self.name
+        return self.name.encode('utf8').decode('utf-8', 'replace')
 
     def print(self):
         print(self.print_format())
