@@ -20,12 +20,24 @@ def init_dir_tree(directory, *args):
     return init_tree([directory] + directories, name_id_parent_fn)
 
 
-class Dir(Entry, GradaleList):
+class Dir(Entry):
+    _type = 'directory'
+
+    def ls(self, deep=None, **kwargs):
+        return DirList(self.path, deep, **kwargs)
+
+    def print_format(self):
+        return '{Fore.BLUE}{name}{Style.RESET_ALL}'.format(name=self.name, Fore=Fore, Style=Style)
+
+    def __repr__(self):
+        return self.name
+
+
+class DirList(Dir, GradaleList):
     _pre_filters = None
     __interfaces__ = ['name']
     __clone_params__ = ['path', 'deep']
     _ls = None
-    _type = 'directory'
 
     def __init__(self, path=None, deep=None, **kwargs):
         # TODO: renombrar deep a depth
@@ -52,14 +64,6 @@ class Dir(Entry, GradaleList):
     def tree_format(self, roots=None, fn_tree=None, roots_filter_fn=None):
         return super(Dir, self).tree_format([self], init_dir_tree)
 
-    def print_format(self):
-        return '{Fore.BLUE}{name}{Style.RESET_ALL}'.format(name=self.name, Fore=Fore, Style=Style)
-
-    def __repr__(self):
-        return self.name
-
-
-class DirPrint(Dir):
     def print_format(self):
         return GradaleList.print_format(self)
 

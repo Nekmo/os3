@@ -11,21 +11,21 @@ class TestList(MockTreeNode):
     def test_list(self):
         """Comprobar que todos los archivos y directorios se estén listando correctamente en el directorio padre
         """
-        self.assertEqual(set([node.name for node in Dir(self.directory)]), set(self.list_dir()))
+        self.assertEqual(set([node.name for node in Dir(self.directory).ls()]), set(self.list_dir()))
 
     def test_tree(self):
-        print(Dir(self.directory, deep=True).tree_format())
+        Dir(self.directory, deep=True).ls().tree_format()
 
     def test_subfilter(self):
         """Comprobar que los filtros sin deep estén funcionando
         """
-        self.assertEqual(set([node.path for node in Dir(self.directory).filter(type='d')]),
+        self.assertEqual(set([node.path for node in Dir(self.directory).ls().filter(type='d')]),
                          set(filter(os.path.isdir, self.list_dir(full_path=True))))
 
     def test_values(self):
         """Comprobar el funcionamiento de values en listas
         """
-        self.assertEqual(sorted(Dir(self.directory).filter(type='f').values_list('name', 'path', 'size'),
+        self.assertEqual(sorted(Dir(self.directory).ls().filter(type='f').values_list('name', 'path', 'size'),
                                 key=itemgetter('path')),
                          sorted([{'name': os.path.split(f)[1], 'size': os.path.getsize(f), 'path': f}
                               for f in filter(os.path.isfile, self.list_dir(full_path=True))], key=itemgetter('path')))
@@ -33,12 +33,12 @@ class TestList(MockTreeNode):
     def test_value(self):
         """Comprobar el funcionamiento de value en listas.
         """
-        self.assertEqual(set(Dir(self.directory).value_list('path')), set(self.list_dir(full_path=True)))
+        self.assertEqual(set(Dir(self.directory).ls().value_list('path')), set(self.list_dir(full_path=True)))
 
     def test_sort(self):
         """Comprobar que el sort funcione.
         """
-        self.assertEqual(Dir(self.directory).sort('size').values_list('path', 'size'),
+        self.assertEqual(Dir(self.directory).ls().sort('size').values_list('path', 'size'),
                          sorted([{'path': path, 'size': os.path.getsize(path)}
 
                                  for path in self.list_dir(full_path=True)], key=itemgetter('size')))
