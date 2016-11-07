@@ -8,11 +8,10 @@ python:
 before_install:
 - pip install codecov tox>=1.8
 install:
-- if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then export PYVER=py27; fi
-- if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then export PYVER=py33; fi
-- if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then export PYVER=py34; fi
-- if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then export PYVER=py35; fi
-- if [[ ${DJANGO}z != 'z' ]]; then export TOXENV=$PYVER-$DJANGO-$CMS; fi
+- if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then export TOXENV=py27; fi
+- if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then export TOXENV=py33; fi
+- if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then export TOXENV=py34; fi
+- if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then export TOXENV=py35; fi
 script: COMMAND='coverage run' tox -e$TOXENV
 after_success:
 - codecov
