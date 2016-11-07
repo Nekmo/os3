@@ -5,6 +5,8 @@ import unittest
 from operator import itemgetter
 from unittest import TestCase
 
+import six
+
 from os3.fs.directory import Dir
 from os3.fs.file import File
 from os3.tests.base import MockTreeNode
@@ -29,7 +31,7 @@ class TestDirectory(MockTreeNode):
     def test_filters_deep(self):
         # print(len([x for x in Dir(self.directory).ls(deep=True).filter(type='f')]))
         files = list(Dir(self.directory).ls(deep=True).filter(type='f').value_list('path'))
-        self.assertCountEqual(files, set(files))
+        six.assertCountEqual(files, set(files))
         self.assertEqual(len(files), (len(self.tree) + 1) * self.files_by_dir)
 
     def test_pre_filters_deep(self):
