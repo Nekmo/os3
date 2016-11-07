@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from future.builtins import str, open
+from future.builtins import open as uopen
 import os
 import tempfile
 import unittest
@@ -53,13 +53,13 @@ class TestFile(TestCase):
         self.filename = tempfile.NamedTemporaryFile().name
 
     def test_read(self):
-        data = u'FOO' * 10
+        data = 'FOO' * 10
         with open(self.filename, 'w') as f:
             f.write(data)
         self.assertEqual(File(self.filename).read(), data)
 
     def test_repeat_read(self):
-        data = u'SPAM' * 10
+        data = 'SPAM' * 10
         with open(self.filename, 'w') as f:
             f.write(data)
         f = File(self.filename)
@@ -90,13 +90,13 @@ class TestFile(TestCase):
 
     def test_read_n_data(self):
         data = u'ññññ'
-        with open(self.filename, 'w') as f:
+        with uopen(self.filename, 'w') as f:
             f.write(data)
         self.assertEqual(File(self.filename).read(4), data)
 
     def test_read_n_bytes_data(self):
         data = u'ññññ'
-        with open(self.filename, 'wb') as f:
+        with uopen(self.filename, 'wb') as f:
             f.write(data.encode('utf-8'))
         self.assertEqual(File(self.filename).read(4, 'rb'), data.encode('utf-8')[:4])
 

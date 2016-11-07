@@ -45,6 +45,8 @@ class File(Entry):
 
     def write(self, data, mode=None, buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None):
         mode = mode or self._mode or 'w'
+        if six.PY2 and 'b' not in mode and isinstance(data, bytes):
+            data = data.decode('utf-8')
         self._get_open(mode, buffering, encoding, errors, newline, closefd, opener).write(data)
 
     def touch(self):
