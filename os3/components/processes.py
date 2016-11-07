@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import subprocess
 
 from os3.fs.entry import Entry

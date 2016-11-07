@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 def add_decorator(*targets, **kwargs):
     decorator = kwargs.pop('decorator', None)
