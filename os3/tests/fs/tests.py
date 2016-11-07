@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
+from future.builtins import str, open
 import os
 import tempfile
 import unittest
-from operator import itemgetter
 from unittest import TestCase
 
 import six

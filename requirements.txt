@@ -1,3 +1,4 @@
+future
 six
 colorama
 treelib

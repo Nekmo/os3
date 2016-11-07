@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from future.builtins import open
 import os
 import sys
 
