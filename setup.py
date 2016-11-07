@@ -19,7 +19,7 @@ AUTHOR = 'Nekmo'
 EMAIL = 'contacto@nekmo.com'
 
 # Información del paquete
-PACKAGE_NAME = 'gradale'
+PACKAGE_NAME = 'os3'
 PACKAGE_DOWNLOAD_URL = ''  # .tar.gz
 URL = ''
 STATUS_LEVEL = 1  # 1:Planning 2:Pre-Alpha 3:Alpha 4:Beta 5:Production/Stable 6:Mature 7:Inactive
