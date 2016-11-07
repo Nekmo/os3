@@ -53,13 +53,13 @@ class TestFile(TestCase):
         self.filename = tempfile.NamedTemporaryFile().name
 
     def test_read(self):
-        data = 'FOO' * 10
+        data = u'FOO' * 10
         with open(self.filename, 'w') as f:
             f.write(data)
         self.assertEqual(File(self.filename).read(), data)
 
     def test_repeat_read(self):
-        data = 'SPAM' * 10
+        data = u'SPAM' * 10
         with open(self.filename, 'w') as f:
             f.write(data)
         f = File(self.filename)

@@ -39,7 +39,7 @@ class File(Entry):
             # PATCH: Python2 requiere que n sea un int siempre
             n = -1
         data = self._get_open(mode, buffering, encoding, errors, newline, closefd, opener).read(n)
-        if n is None:
+        if n is None or n is -1:
             self.seek(0)
         return data
 
