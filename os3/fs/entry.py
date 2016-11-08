@@ -4,10 +4,10 @@ import shutil
 
 import six
 
-from os3.components import Os3Component, StartsWithEqual
+from os3.components import Os3Item, StartsWithEqual
 
 
-class Entry(Os3Component):
+class Entry(Os3Item):
     _type = None
     path = ''
     root = None
@@ -17,7 +17,7 @@ class Entry(Os3Component):
         from os3.fs.file import File
 
         if cls != Entry or not args:
-            return Os3Component.__new__(cls)
+            return Os3Item.__new__(cls)
         if args and isinstance(args[0], Entry):
             path = args[0].path
         else:
@@ -27,7 +27,7 @@ class Entry(Os3Component):
         elif path and os.path.isfile(path):
             return File.__new__(File, *args, **kwargs)
         return File.__new__(File, *args, **kwargs)
-        # return Os3Component.__new__(cls)
+        # return Os3Item.__new__(cls)
 
     def __init__(self, path, **kwargs):
         self.path = self._get_path(path)

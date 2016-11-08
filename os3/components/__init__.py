@@ -16,7 +16,7 @@ def init_tree(process, name_id_parent_fn=None):
     return tree
 
 
-class Os3Component(object):
+class Os3Item(object):
     name = ''
     __clone_params__ = []
 
@@ -47,7 +47,7 @@ class Os3Component(object):
         print(self.print_format())
 
 
-class Os3List(Os3Component):
+class Os3List(Os3Item):
     _tuple_filters = None
     _dict_filters = None
     _sort = None # []
@@ -100,9 +100,9 @@ class Os3List(Os3Component):
         raise NotImplementedError
 
     def __prepare_next(self, elem):
-        """Ejecutar _prepare_next solo si no es un Os3Component.
+        """Ejecutar _prepare_next solo si no es un Os3Item.
         """
-        if isinstance(elem, Os3Component):
+        if isinstance(elem, Os3Item):
             return elem
         return self._prepare_next(elem)
 
