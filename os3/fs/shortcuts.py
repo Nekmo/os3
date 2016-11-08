@@ -6,7 +6,7 @@ from os3.fs.entry import get_path
 from os3.fs.utils import get_node
 
 
-def ls(path, depth=None, **kwargs):
+def ls(path='', depth=None, **kwargs):
     return DirList(path).ls(depth, **kwargs)
 
 

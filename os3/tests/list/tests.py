@@ -14,6 +14,9 @@ class TestList(MockTreeNode):
         """
         self.assertEqual(set([node.name for node in Dir(self.directory).ls()]), set(self.list_dir()))
 
+    def test_print_list(self):
+        Dir(self.directory).ls().print_format()
+
     def test_tree(self):
         Dir(self.directory, deep=True).ls().tree_format()
 
