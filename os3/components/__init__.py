@@ -80,10 +80,6 @@ class Os3List(Os3Item):
         it = self._get_iter()
         if self._sort:
             it = map(self._prepare_next, it)
-            # TODO: eliminar luego
-            it = [x for x in it]
-            # TODO: depurando. Los que son un archivo devuelven el método sin llamar. Directorios vacíos...
-            # ¡¿una lista vacía?! Resultado esperado: int.
             it = sorted(it, key=lambda x: [x.value(interface) for interface in self._sort])
         return it
 
