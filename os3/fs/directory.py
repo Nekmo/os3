@@ -24,8 +24,8 @@ def init_dir_tree(directory, *args):
 class Dir(Entry):
     _type = 'directory'
 
-    def ls(self, deep=None, **kwargs):
-        return DirList(self.path, deep, **kwargs)
+    def ls(self, depth=None, **kwargs):
+        return DirList(self.path, depth, **kwargs)
 
     def print_format(self):
         return '{Fore.BLUE}{name}{Style.RESET_ALL}'.format(name=self.name, Fore=Fore, Style=Style)

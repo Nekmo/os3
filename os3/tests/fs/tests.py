@@ -15,28 +15,28 @@ from os3.tests.base import MockTreeNode
 class TestDirectory(MockTreeNode):
 
     def test_deep(self):
-        self.assertEqual(set(Dir(self.directory).ls(deep=True).value_list('path')), self.deep_list_dir())
+        self.assertEqual(set(Dir(self.directory).ls(depth=True).value_list('path')), self.deep_list_dir())
 
     def test_not_repeated(self):
-        items = Dir(self.directory).ls(deep=True).value_list('path')
+        items = Dir(self.directory).ls(depth=True).value_list('path')
         self.assertEqual(len(items), len(set(items)))
 
     def test_max_deep(self):
-        self.assertEqual(set(Dir(self.directory).ls(deep=0).value_list('path')), set(self.list_dir(full_path=True)))
+        self.assertEqual(set(Dir(self.directory).ls(depth=0).value_list('path')), set(self.list_dir(full_path=True)))
         self.assertNotIn(os.path.join(self.directory, 'dir01/subdir01/subsubdir01'),
-                         Dir(self.directory).ls(deep=1).value_list('path'))
+                         Dir(self.directory).ls(depth=1).value_list('path'))
         self.assertIn(os.path.join(self.directory, 'dir01/subdir01/subsubdir01'),
-                      Dir(self.directory).ls(deep=2).value_list('path'))
+                      Dir(self.directory).ls(depth=2).value_list('path'))
 
     def test_filters_deep(self):
         # print(len([x for x in Dir(self.directory).ls(deep=True).filter(type='f')]))
-        files = list(Dir(self.directory).ls(deep=True).filter(type='f').value_list('path'))
+        files = list(Dir(self.directory).ls(depth=True).filter(type='f').value_list('path'))
         six.assertCountEqual(self, files, set(files))
         self.assertEqual(len(files), (len(self.tree) + 1) * self.files_by_dir)
 
     def test_pre_filters_deep(self):
         from os3.fs.file import File
-        files = list(Dir(self.directory).ls(type='f', deep=True))
+        files = list(Dir(self.directory).ls(type='f', depth=True))
         self.assertEqual(len(files), self.files_by_dir)
         for file in files:
             self.assertIsInstance(file, File)
