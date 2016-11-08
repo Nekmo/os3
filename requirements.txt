@@ -2,3 +2,4 @@ future
 six
 colorama
 treelib
+psutil
