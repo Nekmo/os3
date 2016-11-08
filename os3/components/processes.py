@@ -3,7 +3,7 @@ import subprocess
 
 from os3.fs.entry import Entry
 
-from os3.components import Os3List, init_tree
+from os3.core.list import init_tree, Os3List
 
 
 def all_childrens(process):
@@ -36,7 +36,6 @@ def name_id_parent_fn(process):
 
 
 class Processes(Os3List):
-
     def _get_iter(self):
         import psutil
         return iter(psutil.pids())

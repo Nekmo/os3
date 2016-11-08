@@ -4,7 +4,8 @@ import shutil
 
 import six
 
-from os3.components import Os3Item, StartsWithEqual
+from os3.core.comparators import StartsWithEqual
+from os3.core.item import Os3Item
 
 
 class Entry(Os3Item):

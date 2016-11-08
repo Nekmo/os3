@@ -3,7 +3,7 @@ import os
 
 from colorama import Fore, Style
 
-from os3.components import Os3List, init_tree
+from os3.core.list import init_tree, Os3List
 from os3.fs.entry import Entry
 from os3.utils.nodes import deep_scandir
 
