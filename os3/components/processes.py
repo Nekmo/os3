@@ -3,7 +3,7 @@ import subprocess
 
 from os3.fs.entry import Entry
 
-from os3.components import GradaleList, init_tree
+from os3.components import Os3List, init_tree
 
 
 def all_childrens(process):
@@ -35,7 +35,7 @@ def name_id_parent_fn(process):
     return process.name(), process.pid, parent
 
 
-class Processes(GradaleList):
+class Processes(Os3List):
 
     def _get_iter(self):
         import psutil

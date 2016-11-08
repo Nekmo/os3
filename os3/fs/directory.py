@@ -3,7 +3,7 @@ import os
 
 from colorama import Fore, Style
 
-from os3.components import GradaleList, init_tree
+from os3.components import Os3List, init_tree
 from os3.fs.entry import Entry
 from os3.utils.nodes import deep_scandir
 
@@ -34,7 +34,7 @@ class Dir(Entry):
         return self.name
 
 
-class DirList(Dir, GradaleList):
+class DirList(Dir, Os3List):
     _pre_filters = None
     __interfaces__ = ['name']
     __clone_params__ = ['path', 'deep']
@@ -66,7 +66,7 @@ class DirList(Dir, GradaleList):
         return super(Dir, self).tree_format([self], init_dir_tree)
 
     def print_format(self):
-        return GradaleList.print_format(self)
+        return Os3List.print_format(self)
 
     def __repr__(self):
         return self.print_format()

@@ -16,7 +16,7 @@ def init_tree(process, name_id_parent_fn=None):
     return tree
 
 
-class GradaleComponent(object):
+class Os3Component(object):
     name = ''
     __clone_params__ = []
 
@@ -47,7 +47,7 @@ class GradaleComponent(object):
         print(self.print_format())
 
 
-class GradaleList(GradaleComponent):
+class Os3List(Os3Component):
     _tuple_filters = None
     _dict_filters = None
     _sort = None # []
@@ -100,9 +100,9 @@ class GradaleList(GradaleComponent):
         raise NotImplementedError
 
     def __prepare_next(self, elem):
-        """Ejecutar _prepare_next solo si no es un GradaleComponent.
+        """Ejecutar _prepare_next solo si no es un Os3Component.
         """
-        if isinstance(elem, GradaleComponent):
+        if isinstance(elem, Os3Component):
             return elem
         return self._prepare_next(elem)
 
@@ -161,7 +161,7 @@ class GradaleList(GradaleComponent):
         return pprint_list([x.print_format() for x in self])
 
     def values(self, *interfaces, **kwargs):
-        return super(GradaleList, self).values(*interfaces)
+        return super(Os3List, self).values(*interfaces)
 
     def values_list(self, *interfaces, **kwargs):
         return [n.values(*interfaces, this=True) for n in self.list()]
