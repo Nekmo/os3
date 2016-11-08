@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from os3.components.processes import Processes
+from os3.ps.processes import Processes
 
 
 class TestEntry(TestCase):
