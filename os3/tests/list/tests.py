@@ -18,7 +18,7 @@ class TestList(MockTreeNode):
         Dir(self.directory, deep=True).ls().tree_format()
 
     def test_subfilter(self):
-        """Comprobar que los filtros sin deep estén funcionando
+        """Comprobar que los filtros sin depth estén funcionando
         """
         self.assertEqual(set([node.path for node in Dir(self.directory).ls().filter(type='d')]),
                          set(filter(os.path.isdir, self.list_dir(full_path=True))))

@@ -37,19 +37,19 @@ class Dir(Entry):
 class DirList(Dir, Os3List):
     _pre_filters = None
     __interfaces__ = ['name']
-    __clone_params__ = ['path', 'deep']
+    __clone_params__ = ['path', 'depth']
     _ls = None
 
-    def __init__(self, path=None, deep=None, **kwargs):
-        # TODO: renombrar deep a depth
+    def __init__(self, path=None, depth=None, **kwargs):
+        # TODO: renombrar depth a depth
         path = path or os.getcwd()
         super(Dir, self).__init__(path)
-        self.deep = deep
+        self.depth = depth
         self.root = kwargs.pop('root', None)
         self._pre_filters = kwargs
 
     def _get_iter(self):
-        return deep_scandir(self.path, self.deep, cls=Entry, filter=self._filter, traverse_filter=self._traverse_filter)
+        return deep_scandir(self.path, self.depth, cls=Entry, filter=self._filter, traverse_filter=self._traverse_filter)
         # return iter(os.listdir(self.path))
 
     def _prepare_next(self, elem):

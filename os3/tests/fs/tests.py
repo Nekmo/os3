@@ -29,7 +29,7 @@ class TestDirectory(MockTreeNode):
                       Dir(self.directory).ls(depth=2).value_list('path'))
 
     def test_filters_deep(self):
-        # print(len([x for x in Dir(self.directory).ls(deep=True).filter(type='f')]))
+        # print(len([x for x in Dir(self.directory).ls(depth=True).filter(type='f')]))
         files = list(Dir(self.directory).ls(depth=True).filter(type='f').value_list('path'))
         six.assertCountEqual(self, files, set(files))
         self.assertEqual(len(files), (len(self.tree) + 1) * self.files_by_dir)
@@ -102,6 +102,16 @@ class TestFile(TestCase):
 
     def tearDown(self):
         os.remove(self.filename)
+
+
+class TestShorcuts(TestCase):
+    def test_ls(self):
+        from os3.sc import ls
+        d1 = Dir('/foo').ls(depth=True)
+        d2 = ls('/foo', depth=True)
+        self.assertEqual(d1.path, d2.path)
+        self.assertEqual(d1.depth, d2.depth)
+        self.assertEqual(d1.__class__, d2.__class__)
 
 
 if __name__ == '__main__':
