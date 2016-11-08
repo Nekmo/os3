@@ -1,1 +1,1 @@
-from os3.shortcuts import *
+from os3.fs.shortcuts import *

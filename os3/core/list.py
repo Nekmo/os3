@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from os3.core.item import Os3Item
 from os3.utils.console import pprint_list
 
