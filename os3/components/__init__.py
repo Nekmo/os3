@@ -131,7 +131,7 @@ class Os3List(Os3Item):
                 elem = self.__prepare_next(self._next())
             except StopIteration:
                 self._iter = None
-                raise StopIteration
+                return
             if not self._elem_is_valid(elem):
                 continue
             yield elem
