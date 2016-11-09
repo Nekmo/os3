@@ -41,9 +41,6 @@ class TestDirectory(MockTreeNode):
         for file in files:
             self.assertIsInstance(file, File)
 
-    def test_repr(self):
-        self.assertEqual(repr(Dir(self.directory)), Dir(self.directory).name)
-
     def test_print_format(self):
         self.assertIn(Dir(self.directory).name, Dir(self.directory).print_format())
 

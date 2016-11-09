@@ -43,7 +43,7 @@ class DirList(Dir, Os3List):
         super(DirList, self).__init__(path)
         self.depth = depth
         self.root = kwargs.pop('root', None)
-        self.default_format = kwargs.pop('default_format', None)
+        self.default_format = kwargs.pop('default_format', self.default_format)
         self._pre_filters = kwargs
 
     def _get_iter(self):
