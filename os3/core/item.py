@@ -22,8 +22,9 @@ class Os3Item(object):
             value = value()
         return value
 
-    def clone(self):
+    def clone(self, **extra):
         params = {key: getattr(self, key) for key in self.__clone_params__}
+        params.update(extra)
         new_instance = self.__class__(**params)
         return new_instance
 
@@ -32,3 +33,6 @@ class Os3Item(object):
 
     def print(self):
         print(self.print_format())
+
+    def __repr__(self):
+        return self.print_format()

@@ -30,9 +30,6 @@ class Dir(Entry):
     def print_format(self):
         return '{Fore.BLUE}{name}{Style.RESET_ALL}'.format(name=self.name, Fore=Fore, Style=Style)
 
-    def __repr__(self):
-        return self.name
-
 
 class DirList(Dir, Os3List):
     _pre_filters = None
@@ -43,9 +40,10 @@ class DirList(Dir, Os3List):
     def __init__(self, path=None, depth=None, **kwargs):
         # TODO: renombrar depth a depth
         path = path or os.getcwd()
-        super(Dir, self).__init__(path)
+        super(DirList, self).__init__(path)
         self.depth = depth
         self.root = kwargs.pop('root', None)
+        self.default_format = kwargs.pop('default_format', None)
         self._pre_filters = kwargs
 
     def _get_iter(self):
@@ -63,10 +61,7 @@ class DirList(Dir, Os3List):
         return elem.check_filters(**self._pre_filters or {})
 
     def tree_format(self, roots=None, fn_tree=None, roots_filter_fn=None):
-        return super(Dir, self).tree_format([self], init_dir_tree)
+        return super(DirList, self).tree_format([self], init_dir_tree)
 
     def print_format(self):
         return Os3List.print_format(self)
-
-    def __repr__(self):
-        return self.print_format()

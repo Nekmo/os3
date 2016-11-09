@@ -18,6 +18,7 @@ def init_tree(process, name_id_parent_fn=None):
 
 
 class Os3List(Os3Item):
+    default_format = 'list'
     _tuple_filters = None
     _dict_filters = None
     _sort = None # []
@@ -112,7 +113,7 @@ class Os3List(Os3Item):
     #     return self.__next__()
 
     def print_format(self):
-        return self.list_format()
+        return getattr(self, '{}_format'.format(self.default_format))()
 
     def tree_format(self, roots=None, fn_tree=None):
         roots = roots if roots is not None else self
@@ -134,3 +135,6 @@ class Os3List(Os3Item):
 
     def value_list(self, interface, **kwargs):
         return [n.value(interface) for n in self.list()]
+
+    def tree(self):
+        return self.clone(default_format='tree')
