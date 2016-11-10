@@ -36,13 +36,13 @@ class FakeDirEntry(object):
 
 def scandir(path='.', errors=None):
     if sys.version_info >= (3, 5):
-        fn = os.scandir
+        return os.scandir(path)
+    try:
+        import scandir
+    except ImportError:
+        return map(FakeDirEntry, os.listdir(path))
     else:
-        try:
-            import scandir as fn
-        except ImportError:
-            fn = lambda x: map(FakeDirEntry, os.listdir(x))
-    return fn(path)
+        return scandir(path)
 
 
 def get_path(path):
