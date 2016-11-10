@@ -12,6 +12,7 @@ def ls(path='', depth=None, **kwargs):
     return DirList(path).ls(depth, **kwargs)
 ls.filter = DirList().filter
 
+
 def symlink(source, link_name):
     return get_node(source).symlink(link_name)
 
