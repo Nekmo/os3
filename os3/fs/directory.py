@@ -65,3 +65,7 @@ class DirList(Dir, Os3List):
 
     def print_format(self):
         return Os3List.print_format(self)
+
+    def remove(self):
+        for item in self:
+            item.remove()

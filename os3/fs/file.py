@@ -99,5 +99,8 @@ class File(Entry):
     def seek(self, i):
         return self._open.seek(i)
 
+    def remove(self):
+        return os.remove(self.path)
+
     def __repr__(self):
         return self.name
