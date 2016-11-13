@@ -41,8 +41,7 @@ def pprint_list(input_list):
     # http://stackoverflow.com/questions/25026556/output-list-like-ls
     (term_width, term_height) = get_terminal_size()
     if len( str(input_list) ) <= term_width:
-        print(input_list)
-        return
+        return '    '.join(input_list)
 
     repr_list = [x.decode('utf-8') if six.PY2 else x for x in input_list]
     # repr_list = [x.decode('utf-8') for x in input_list]
