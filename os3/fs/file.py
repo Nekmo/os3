@@ -14,6 +14,7 @@ class File(Entry):
     _type = 'file'
     _open = None
     _mode = None
+    _ext = None
 
     def _get_open(self, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None):
         if self._open is None or self._mode != mode:
@@ -60,6 +61,13 @@ class File(Entry):
     @property
     def size(self):
         return os.path.getsize(self.path)
+
+    @property
+    def ext(self):
+        if self._ext is None:
+            parts = self.name.split('.')
+            self._ext = parts[-1] if len(parts) > 1 else ''
+        return self._ext
 
     def readlines(self, n=None, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True,
                   opener=None, breaklines=True):
