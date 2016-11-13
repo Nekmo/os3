@@ -26,6 +26,12 @@ class TestList(MockTreeNode):
         self.assertEqual(set([node.path for node in Dir(self.directory).ls().filter(type='d')]),
                          set(filter(os.path.isdir, self.list_dir(full_path=True))))
 
+    def test_arg_filter(self):
+        """Probar los filtros mediante argumento
+        """
+        self.assertEqual(set([node.path for node in Dir(self.directory).ls().filter(lambda x: x.type == 'dir')]),
+                         set(filter(os.path.isdir, self.list_dir(full_path=True))))
+
     def test_values(self):
         """Comprobar el funcionamiento de values en listas
         """

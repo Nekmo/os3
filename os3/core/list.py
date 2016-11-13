@@ -24,16 +24,18 @@ class Os3List(Os3Item):
     _sort = None # []
     _iter = None
 
-    def _add_filters(self, filters):
+    def _add_filters(self, tuple_filters, dict_filters):
+        self._tuple_filters = self._tuple_filters or ()
         self._dict_filters = self._dict_filters or {}
-        self._dict_filters.update(filters)
+        self._tuple_filters += tuple_filters
+        self._dict_filters.update(dict_filters)
 
     def _set_sort(self, *interfaces):
         self._sort = interfaces
 
-    def filter(self, **kwargs):
+    def filter(self, *args, **kwargs):
         instance = self.clone()
-        instance._add_filters(kwargs)
+        instance._add_filters(args, kwargs)
         return instance
 
     def sort(self, *interfaces):
@@ -79,21 +81,7 @@ class Os3List(Os3Item):
     def _elem_is_valid(self, elem):
         """Comprobar si el elemento se puede devolver por los filtros
         """
-        return elem.check_filters(**self._dict_filters or {})
-
-    # def __next__(self):
-    #     elem = None
-    #     while True:
-    #         elem = self.__prepare_next(self._next())
-    #         if self._elem_is_valid(elem):
-    #             break
-    #     return elem
-    #
-    # def __iter__(self):
-    #     # Probar a cambiar __next__ por __iter__ y el return del primero por yield
-    #     # http://stackoverflow.com/questions/2776829/difference-between-pythons-generators-and-iterators
-    # http://stackoverflow.com/questions/231767/what-does-the-yield-keyword-do-in-python
-    #     return self
+        return elem.check_filters(*self._tuple_filters or (), **self._dict_filters or {})
 
     # TODO: Pruebas. Código de arriba funcional
     def __iter__(self):
@@ -138,3 +126,6 @@ class Os3List(Os3Item):
 
     def tree(self):
         return self.clone(default_format='tree')
+
+    def count(self):
+        return len(list(self))

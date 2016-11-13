@@ -7,7 +7,10 @@ class Os3Item(object):
     name = ''
     __clone_params__ = []
 
-    def check_filters(self, **kwargs):
+    def check_filters(self, *args, **kwargs):
+        for fn_filter in args:
+            if not fn_filter(self):
+                return False
         for name, value in kwargs.items():
             if self.value(name) != value:
                 return False
