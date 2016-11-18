@@ -23,6 +23,7 @@ class Os3List(Os3Item):
     _dict_filters = None
     _sort = None # []
     _iter = None
+    _format_interfaces = None  # Uses in table
 
     def _add_filters(self, tuple_filters, dict_filters):
         self._tuple_filters = self._tuple_filters or ()
@@ -83,7 +84,6 @@ class Os3List(Os3Item):
         """
         return elem.check_filters(*self._tuple_filters or (), **self._dict_filters or {})
 
-    # TODO: Pruebas. Código de arriba funcional
     def __iter__(self):
         while True:
             try:
@@ -94,11 +94,6 @@ class Os3List(Os3Item):
             if not self._elem_is_valid(elem):
                 continue
             yield elem
-
-    # def next(self):
-    #     """Retrocompatibilidad con Python2
-    #     """
-    #     return self.__next__()
 
     def _table_class(self):
         from terminaltables import SingleTable
@@ -120,6 +115,7 @@ class Os3List(Os3Item):
         return pprint_list([x.print_format() for x in self])
 
     def table_format(self, *interfaces):
+        interfaces = interfaces or self._format_interfaces
         table_class = self._table_class()
         data = self.values_list(*interfaces)
         data = [interfaces] + data
@@ -137,6 +133,11 @@ class Os3List(Os3Item):
 
     def tree(self):
         return self.clone(default_format='tree')
+
+    def table(self, *interfaces):
+        ls = self.clone(default_format='table')
+        ls._format_interfaces = interfaces
+        return ls
 
     def count(self):
         return len(list(self))
