@@ -23,3 +23,14 @@ def withrepr(reprfun):
     def _wrap(func):
         return reprwrapper(reprfun, func)
     return _wrap
+
+
+def catch(fn):
+    def fn2(*args, **kwargs):
+        exceptions = kwargs.pop('exceptions', (Exception,))
+        return_value = kwargs.pop('return_value', None)
+        try:
+            return fn(*args, **kwargs)
+        except exceptions:
+            return return_value
+    return fn2

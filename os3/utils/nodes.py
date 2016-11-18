@@ -4,6 +4,7 @@ import sys
 import stat
 
 import six
+from os3.utils.decorators import catch
 
 
 class FakeDirEntry(object):
@@ -34,7 +35,8 @@ class FakeDirEntry(object):
         return self.stat().st_ino
 
 
-def scandir(path='.', errors=None):
+@catch
+def scandir(path='.'):
     if sys.version_info >= (3, 5):
         return os.scandir(path)
     try:
@@ -51,11 +53,11 @@ def get_path(path):
     return path
 
 
-def deep_scandir(path, deep=False, cls=None, filter=None, traverse_filter=None, errors=None):
+def deep_scandir(path, deep=False, cls=None, filter=None, traverse_filter=None, exceptions=None):
     filter = filter or (lambda x: True)
     traverse_filter = traverse_filter or (lambda x: True)
 
-    for item in scandir(path, errors):
+    for item in scandir(path, return_value=iter(()), exceptions=exceptions):
         item = os.path.join(get_path(path), get_path(item))
         item = item if cls is None else cls(item)
         traverse_result = item.is_dir() and traverse_filter(item)
@@ -65,7 +67,7 @@ def deep_scandir(path, deep=False, cls=None, filter=None, traverse_filter=None, 
                 new_deep = deep - 1
             # yield from deep_scandir(item.path, new_deep)
             # for subitem in deep_scandir(item.path, new_deep, cls):
-            for subitem in deep_scandir(item.path, new_deep, cls, filter, traverse_filter, errors):
+            for subitem in deep_scandir(item.path, new_deep, cls, filter, traverse_filter, exceptions):
                 yield subitem
         if item.is_dir() and not traverse_result:
             # Si es un directorio y no cumple el traverse_result, no merece probar filter
