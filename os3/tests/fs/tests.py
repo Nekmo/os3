@@ -15,22 +15,22 @@ from os3.tests.base import MockTreeNode
 class TestDirectory(MockTreeNode):
 
     def test_deep(self):
-        self.assertEqual(set(Dir(self.directory).ls(depth=True).value_list('path')), self.deep_list_dir())
+        self.assertEqual(set(Dir(self.directory).ls(depth=True).value('path')), self.deep_list_dir())
 
     def test_not_repeated(self):
-        items = Dir(self.directory).ls(depth=True).value_list('path')
+        items = Dir(self.directory).ls(depth=True).value('path')
         self.assertEqual(len(items), len(set(items)))
 
     def test_max_deep(self):
-        self.assertEqual(set(Dir(self.directory).ls(depth=0).value_list('path')), set(self.list_dir(full_path=True)))
+        self.assertEqual(set(Dir(self.directory).ls(depth=0).value('path')), set(self.list_dir(full_path=True)))
         self.assertNotIn(os.path.join(self.directory, 'dir01/subdir01/subsubdir01'),
-                         Dir(self.directory).ls(depth=1).value_list('path'))
+                         Dir(self.directory).ls(depth=1).value('path'))
         self.assertIn(os.path.join(self.directory, 'dir01/subdir01/subsubdir01'),
-                      Dir(self.directory).ls(depth=2).value_list('path'))
+                      Dir(self.directory).ls(depth=2).value('path'))
 
     def test_filters_deep(self):
         # print(len([x for x in Dir(self.directory).ls(depth=True).filter(type='f')]))
-        files = list(Dir(self.directory).ls(depth=True).filter(type='f').value_list('path'))
+        files = list(Dir(self.directory).ls(depth=True).filter(type='f').value('path'))
         six.assertCountEqual(self, files, set(files))
         self.assertEqual(len(files), (len(self.tree) + 1) * self.files_by_dir)
 

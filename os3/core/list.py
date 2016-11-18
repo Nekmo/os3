@@ -116,12 +116,9 @@ class Os3List(Os3Item):
         return pprint_list([x.print_format() for x in self])
 
     def values(self, *interfaces, **kwargs):
-        return super(Os3List, self).values(*interfaces)
-
-    def values_list(self, *interfaces, **kwargs):
         return [n.values(*interfaces, this=True) for n in self.list()]
 
-    def value_list(self, interface, **kwargs):
+    def value(self, interface, **kwargs):
         return [n.value(interface) for n in self.list()]
 
     def tree(self):
