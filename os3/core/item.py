@@ -19,6 +19,9 @@ class Os3Item(object):
     def values(self, *interfaces, **kwargs):
         return {key: getattr(self, key) for key in interfaces}
 
+    def values_list(self, *interfaces):
+        return [self.value(key) for key in interfaces]
+
     def value(self, interface):
         value = getattr(self, interface)
         if hasattr(value, '__call__'):

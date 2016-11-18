@@ -100,6 +100,10 @@ class Os3List(Os3Item):
     #     """
     #     return self.__next__()
 
+    def _table_class(self):
+        from terminaltables import SingleTable
+        return SingleTable
+
     def print_format(self):
         return getattr(self, '{}_format'.format(self.default_format))()
 
@@ -115,8 +119,18 @@ class Os3List(Os3Item):
     def list_format(self):
         return pprint_list([x.print_format() for x in self])
 
+    def table_format(self, *interfaces):
+        table_class = self._table_class()
+        data = self.values_list(*interfaces)
+        data = [interfaces] + data
+        table = table_class(data)
+        return table.table
+
     def values(self, *interfaces, **kwargs):
         return [n.values(*interfaces, this=True) for n in self.list()]
+
+    def values_list(self, *interfaces):
+        return [n.values_list(*interfaces) for n in self.list()]
 
     def value(self, interface, **kwargs):
         return [n.value(interface) for n in self.list()]
