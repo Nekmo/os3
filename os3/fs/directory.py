@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 
+import six
 from colorama import Fore, Style
 
 from os3.core.list import init_tree, Os3List
@@ -19,6 +20,12 @@ def init_dir_tree(directory, *args):
     directory.root = directory.path
     directories = list(sorted(directory, key=lambda x: x.depth()))
     return init_tree([directory] + directories, name_id_parent_fn)
+
+
+if six.PY3:
+    LS_EXCEPTIONS = (PermissionError, OSError)
+else:
+    LS_EXCEPTIONS = (OSError,)
 
 
 class Dir(Entry):
@@ -53,7 +60,7 @@ class DirList(Dir, Os3List):
         # return iter(os.listdir(self.path))
 
     def _get_catched_exceptions(self):
-        return (PermissionError,) if not self.fail else ()
+        return LS_EXCEPTIONS if not self.fail else ()
 
     def _prepare_next(self, elem):
         return Entry.get_node(elem.path)
