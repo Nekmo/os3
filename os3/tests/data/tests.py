@@ -7,5 +7,11 @@ from os3.data.tree import DataTree
 class TestTree(TestCase):
 
     def test_count(self):
-        dt = DataTree([DataItem()] * 10).ls()
-        self.assertEqual(dt.count(), 10)
+        count = 10
+        dt = DataTree([DataItem()] * count).ls()
+        self.assertEqual(dt.count(), count)
+
+    def test_deep_count(self):
+        count = 10
+        sub_count = 7
+        dt = DataTree([DataTree([DataItem()] * sub_count)] * count).ls()
