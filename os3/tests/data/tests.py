@@ -11,7 +11,8 @@ class TestTree(TestCase):
         dt = DataTree([DataItem()] * count).ls()
         self.assertEqual(dt.count(), count)
 
-    def test_deep_count(self):
+    def test_depth_count(self):
         count = 10
         sub_count = 7
-        dt = DataTree([DataTree([DataItem()] * sub_count)] * count).ls()
+        dt = DataTree([DataTree([DataItem()] * sub_count)] * count).ls(depth=True)
+        self.assertEqual(dt.count(), count + (count * sub_count))

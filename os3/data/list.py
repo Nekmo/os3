@@ -7,7 +7,8 @@ def items_iterator(items, depth=None):
         yield item
         if not isinstance(item, DataTree) or not depth:
             continue
-        for subitem in item:
+        depth = depth - 1 if not isinstance(depth, bool) and isinstance(depth, int) else depth
+        for subitem in item.ls(depth=depth):
             yield subitem
 
 
