@@ -31,8 +31,12 @@ else:
 class Dir(Entry):
     _type = 'directory'
 
+    @classmethod
+    def get_dir_list_class(cls):
+        return DirList
+
     def ls(self, depth=None, fail=False, **kwargs):
-        return DirList(self.path, depth, fail, **kwargs)
+        return self.get_dir_list_class()(self.path, depth, fail, **kwargs)
 
     def print_format(self):
         return '{Fore.BLUE}{name}{Style.RESET_ALL}'.format(name=self.name, Fore=Fore, Style=Style)
@@ -55,7 +59,7 @@ class DirList(Dir, Os3List):
         self._pre_filters = kwargs
 
     def _get_iter(self):
-        return deep_scandir(self.path, self.depth, cls=Entry, filter=self._filter,
+        return deep_scandir(self.path, self.depth, cls=self.get_entry_class(), filter=self._filter,
                             traverse_filter=self._traverse_filter, exceptions=self._get_catched_exceptions())
         # return iter(os.listdir(self.path))
 
@@ -63,7 +67,7 @@ class DirList(Dir, Os3List):
         return LS_EXCEPTIONS if not self.fail else ()
 
     def _prepare_next(self, elem):
-        return Entry.get_node(elem.path)
+        return self.get_entry_class().get_node(elem.path)
         # return Node.get_node(os.path.join(self.path, elem))
 
     def _filter(self, elem):

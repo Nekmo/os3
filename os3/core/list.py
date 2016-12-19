@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import random
 
 from os3.core.item import Os3Item
 from os3.utils.console import pprint_list
@@ -130,6 +131,9 @@ class Os3List(Os3Item):
 
     def value(self, interface, **kwargs):
         return [n.value(interface) for n in self.list()]
+
+    def random(self):
+        return random.choice(list(self))
 
     def tree(self):
         return self.clone(default_format='tree')

@@ -12,12 +12,12 @@ class Entry(Os3Item):
     _type = None
     path = ''
     root = None
+    entry_class = None
 
     def __new__(cls, *args, **kwargs):
-        from os3.fs.directory import Dir
-        from os3.fs.file import File
-
-        if cls != Entry or not args:
+        classes = cls.get_classes()
+        Dir, File = classes['Dir'], classes['File']
+        if cls != (cls.entry_class or Entry) or not args:
             return Os3Item.__new__(cls)
         if args and isinstance(args[0], Entry):
             path = args[0].path
@@ -32,6 +32,19 @@ class Entry(Os3Item):
 
     def __init__(self, path, **kwargs):
         self.path = self._get_path(path)
+
+    @classmethod
+    def get_classes(cls):
+        from os3.fs.directory import Dir
+        from os3.fs.file import File
+        return {
+            'Dir': Dir,
+            'File': File,
+        }
+
+    @classmethod
+    def get_entry_class(self):
+        return self.entry_class or Entry
 
     @property
     def name(self):
@@ -55,14 +68,13 @@ class Entry(Os3Item):
 
     @classmethod
     def get_cls(cls, path):
-        from os3.fs.directory import Dir
-        from os3.fs.file import File
+        classes = cls.get_classes()
 
         if os.path.isdir(path):
             # return File
-            return Dir
+            return classes['Dir']
         else:
-            return File
+            return classes['File']
 
     @classmethod
     def get_node(cls, path):
@@ -107,11 +119,10 @@ class Entry(Os3Item):
         shutil.copytree(self.path, os.path.expanduser(dst), symlinks, ignore)
 
     def parent(self):
-        from os3.fs.directory import Dir
         path = os.path.split(self.path)[0]
         if self.root and not path.startswith(self.root):
             return None
-        return Dir(path)
+        return self.get_classes()['Dir'](path)
 
     def sub(self, subpath):
         # TODO: Esto no debería estar limitado a los directorios?
