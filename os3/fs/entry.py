@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import datetime
 import os
 import shutil
 
@@ -60,7 +61,7 @@ class Entry(Os3Item):
 
     @property
     def mtime(self):
-        return os.path.getmtime(self.path)
+        return datetime.datetime.fromtimestamp(os.path.getmtime(self.path))
 
     @property
     def atime(self):
