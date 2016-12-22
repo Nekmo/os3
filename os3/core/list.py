@@ -56,6 +56,7 @@ class Os3List(Os3Item):
         if self._sort:
             it = map(self._prepare_next, it)
             it = sorted(it, key=lambda x: [x.value(interface) for interface in self._sort])
+            it = iter(it)
         return it
 
     def _next(self, reset=False):
