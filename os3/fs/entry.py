@@ -119,6 +119,9 @@ class Entry(Os3Item):
     def copy(self, dst, symlinks=False, ignore=None):
         shutil.copytree(self.path, os.path.expanduser(dst), symlinks, ignore)
 
+    def remove(self):
+        raise NotImplementedError
+
     def parent(self):
         path = os.path.split(self.path)[0]
         if self.root and not path.startswith(self.root):

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import shutil
 
 import six
 from colorama import Fore, Style
@@ -37,6 +38,15 @@ class Dir(Entry):
 
     def ls(self, depth=None, fail=False, **kwargs):
         return self.get_dir_list_class()(self.path, depth, fail, **kwargs)
+
+    def mkdir(self, name, exist_ok=True):
+        subdirectory = self.sub(name)
+        if not subdirectory.lexists() or not exist_ok:
+            os.mkdir(subdirectory.path)
+        return subdirectory
+
+    def remove(self):
+        return shutil.rmtree(self.path)
 
     def print_format(self):
         return '{Fore.BLUE}{name}{Style.RESET_ALL}'.format(name=self.name, Fore=Fore, Style=Style)
