@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import mimetypes
+
 from future.builtins import open
 import os
 import sys
@@ -7,6 +9,8 @@ import six
 
 from os3.fs.entry import Entry
 
+
+mimetypes.init()
 
 class File(Entry):
     __interfaces__ = ['name']
@@ -101,6 +105,9 @@ class File(Entry):
 
     def remove(self):
         return os.remove(self.path)
+
+    def mimetype(self):
+        return mimetypes.guess_type(self.name)[0]
 
     def __repr__(self):
         return self.name
