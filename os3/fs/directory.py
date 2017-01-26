@@ -31,6 +31,7 @@ else:
 
 class Dir(Entry):
     _type = 'directory'
+    mimetype = 'inode/directory'
 
     @classmethod
     def get_dir_list_class(cls):

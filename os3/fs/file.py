@@ -64,7 +64,10 @@ class File(Entry):
 
     @property
     def size(self):
-        return os.path.getsize(self.path)
+        try:
+            return os.path.getsize(self.path)
+        except FileNotFoundError:
+            return
 
     @property
     def ext(self):
@@ -106,6 +109,7 @@ class File(Entry):
     def remove(self):
         return os.remove(self.path)
 
+    @property
     def mimetype(self):
         return mimetypes.guess_type(self.name)[0]
 

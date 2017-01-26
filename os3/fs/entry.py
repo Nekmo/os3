@@ -116,6 +116,9 @@ class Entry(Os3Item):
     def symlink(self, link_name):
         os.symlink(self.path, get_path(link_name))
 
+    def move(self, dst):
+        shutil.move(self.path, dst)
+
     def copy(self, dst, symlinks=False, ignore=None):
         shutil.copytree(self.path, os.path.expanduser(dst), symlinks, ignore)
 
