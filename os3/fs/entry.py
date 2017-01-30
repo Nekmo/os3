@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import stat
 import datetime
 import os
 import shutil
@@ -10,6 +11,7 @@ from os3.core.item import Os3Item
 
 
 class Entry(Os3Item):
+    _stat = None
     _type = None
     path = ''
     root = None
@@ -61,11 +63,22 @@ class Entry(Os3Item):
 
     @property
     def mtime(self):
-        return datetime.datetime.fromtimestamp(os.path.getmtime(self.path))
+        stat = self.stat()
+        if not stat:
+            return
+        return datetime.datetime.fromtimestamp(stat.st_mtime)
 
     @property
     def atime(self):
         return os.path.getatime(self.path)
+
+    def stat(self):
+        if self._stat is None:
+            try:
+                self._stat = os.stat(self.path)
+            except FileNotFoundError:
+                self._stat = False
+        return self._stat
 
     @classmethod
     def get_cls(cls, path):
