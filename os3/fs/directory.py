@@ -37,6 +37,9 @@ class Dir(Entry):
     def get_dir_list_class(cls):
         return DirList
 
+    def copy(self, dst, symlinks=False, ignore=None):
+        shutil.copytree(self.path, os.path.expanduser(dst), symlinks, ignore)
+
     def ls(self, depth=None, fail=False, **kwargs):
         return self.get_dir_list_class()(self.path, depth, fail, **kwargs)
 

@@ -132,9 +132,6 @@ class Entry(Os3Item):
     def move(self, dst):
         shutil.move(self.path, dst)
 
-    def copy(self, dst, symlinks=False, ignore=None):
-        shutil.copytree(self.path, os.path.expanduser(dst), symlinks, ignore)
-
     def remove(self):
         raise NotImplementedError
 

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import mimetypes
 
+import shutil
 from future.builtins import open
 import os
 import sys
@@ -19,6 +20,9 @@ class File(Entry):
     _open = None
     _mode = None
     _ext = None
+
+    def copy(self, dst, symlinks=False, ignore=None):
+        shutil.copy2(self.path, os.path.expanduser(dst))
 
     def _get_open(self, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None):
         if self._open is None or self._mode != mode:
