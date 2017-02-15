@@ -70,7 +70,11 @@ class Entry(Os3Item):
 
     @property
     def atime(self):
-        return os.path.getatime(self.path)
+        stat = self.stat()
+        if not stat:
+            return
+        return datetime.datetime.fromtimestamp(stat.st_atime)
+
 
     def stat(self):
         if self._stat is None:
